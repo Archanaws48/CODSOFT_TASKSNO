@@ -1,0 +1,147 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("internship_task1.csv")
+
+df["Gender"] = df["Gender"].str.capitalize()
+
+avg_salary = df.groupby("Gender")["Salary"].mean()
+
+avg_salary.plot(kind="bar")
+
+plt.title("Average Salary by Gender")
+plt.xlabel("Gender")
+plt.ylabel("Average Salary")
+plt.xticks(rotation=0)
+
+# plt.show()
+
+print(df)
+
+# Line Chart - Salary by Age
+
+salary_by_age = df.groupby("Age")["Salary"].mean()
+
+salary_by_age.plot(kind="line", marker="o")
+
+plt.title("Average Salary by Age")
+plt.xlabel("Age")
+plt.ylabel("Average Salary")
+
+plt.grid(True)
+
+#plt.show
+
+# Pie Chart - Gender Distribution
+
+gender_count = df["Gender"].value_counts()
+
+plt.figure(figsize=(6, 6))
+
+plt.pie(
+    gender_count,
+    labels=gender_count.index,
+    autopct="%1.1f%%",
+    startangle=90
+)
+
+plt.title("Gender Distribution")
+
+#plt.show()
+
+# Histogram - Salary Distribution
+
+plt.figure(figsize=(7, 5))
+
+plt.hist(df["Salary"], bins=5, edgecolor="black")
+
+plt.title("Salary Distribution")
+plt.xlabel("Salary")
+plt.ylabel("Number of Employees")
+
+#plt.show()
+
+# Scatter Plot - Age vs Salary
+
+plt.figure(figsize=(7, 5))
+
+plt.scatter(df["Age"], df["Salary"])
+
+plt.title("Age vs Salary")
+plt.xlabel("Age")
+plt.ylabel("Salary")
+
+plt.grid(True)
+
+#plt.show()
+
+
+# Insights
+
+print("INSIGHTS")
+print("1. Female employees have a higher average salary than male employees.")
+print("2. The dataset has an equal distribution of male and female employees.")
+print("3. Salary varies across different age groups and does not consistently increase with age.")
+print("4. Most salaries are concentrated between 25,000 and 35,000.")
+print("5. The scatter plot shows variation between age and salary.")
+
+
+
+
+# DASHBOARD
+
+fig, axes = plt.subplots(2, 3, figsize=(15, 9))
+
+# 1. Bar Chart
+
+avg_salary = df.groupby("Gender")["Salary"].mean()
+
+bars = axes[0, 0].bar(avg_salary.index, avg_salary.values)
+
+axes[0, 0].set_title("Average Salary by Gender")
+axes[0, 0].set_xlabel("Gender")
+axes[0, 0].set_ylabel("Average Salary")
+
+# Show exact values
+for bar in bars:
+    value = bar.get_height()
+    axes[0, 0].text(
+        bar.get_x() + bar.get_width() / 2,
+        value + 500,
+        f"{value:,.0f}",
+        ha="center"
+    )
+# 2. Line Chart
+salary_by_age = df.groupby("Age")["Salary"].mean()
+axes[0, 1].plot(salary_by_age.index, salary_by_age.values, marker="o")
+axes[0, 1].set_title("Average Salary by Age")
+axes[0, 1].set_xlabel("Age")
+axes[0, 1].set_ylabel("Average Salary")
+
+# 3. Pie Chart
+gender_count = df["Gender"].value_counts()
+axes[0, 2].pie(
+    gender_count,
+    labels=gender_count.index,
+    autopct="%1.1f%%"
+)
+axes[0, 2].set_title("Gender Distribution")
+
+# 4. Histogram
+axes[1, 0].hist(df["Salary"], bins=5, edgecolor="black")
+axes[1, 0].set_title("Salary Distribution")
+axes[1, 0].set_xlabel("Salary")
+axes[1, 0].set_ylabel("Number of Employees")
+
+# 5. Scatter Plot
+axes[1, 1].scatter(df["Age"], df["Salary"])
+axes[1, 1].set_title("Age vs Salary")
+axes[1, 1].set_xlabel("Age")
+axes[1, 1].set_ylabel("Salary")
+
+# Empty space
+axes[1, 2].axis("off")
+
+plt.suptitle("Employee Salary Analysis Dashboard", fontsize=18)
+plt.tight_layout()
+plt.show()
